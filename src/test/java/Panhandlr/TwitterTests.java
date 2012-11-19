@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static Panhandlr.StreamFactory.getNewStreamConnection;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class TwitterTests {
@@ -15,7 +17,7 @@ public class TwitterTests {
 
         TermFilter testTermFilter = new StockTermFilter(stocks);
 
-        TwitterStreamConnection testTwitterStreamConnection = StreamFactory.getNewStreamConnection(testTermFilter);
+        TwitterStreamConnection testTwitterStreamConnection = getNewStreamConnection(testTermFilter);
 
         List<String> messages = testTwitterStreamConnection.getSampleStreamMessages(10);
 
