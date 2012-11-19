@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.assertThat;
+
 public class TwitterTests {
 
     @Test
@@ -13,7 +15,7 @@ public class TwitterTests {
 
         TermFilter testTermFilter = new StockTermFilter(stocks);
 
-        TwitterStreamConnection testTwitterStreamConnection = TestStreamFactory.getNewStreamConnection(testTermFilter);
+        TwitterStreamConnection testTwitterStreamConnection = StreamFactory.getNewStreamConnection(testTermFilter);
 
         List<String> messages = testTwitterStreamConnection.getSampleStreamMessages(10);
 
