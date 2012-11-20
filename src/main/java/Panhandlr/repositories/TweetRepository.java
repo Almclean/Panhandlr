@@ -1,9 +1,8 @@
 package Panhandlr.repositories;
 
 import Panhandlr.domain.TermFilter;
-import Panhandlr.domain.TwitterStreamConnection;
-import Panhandlr.services.StreamFactory;
 import twitter4j.Tweet;
+import twitter4j.TwitterStream;
 
 import java.util.List;
 
@@ -12,10 +11,10 @@ import java.util.List;
  */
 public class TweetRepository {
 
-    private final TwitterStreamConnection twitterStreamConnection;
+    private final TwitterStream twitterStream;
 
-    public TweetRepository(StreamFactory streamFactory, TermFilter termFilter) {
-        this.twitterStreamConnection = streamFactory.getNewStreamConnection(termFilter);
+    public TweetRepository(TwitterStream twitterStream, TermFilter termFilter) {
+        this.twitterStream = twitterStream;
     }
 
     public List<Tweet> getFixedNumberOfTweets(int numberOfTweets) {

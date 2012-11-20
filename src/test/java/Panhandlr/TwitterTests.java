@@ -2,7 +2,6 @@ package Panhandlr;
 
 import Panhandlr.domain.StockTermFilter;
 import Panhandlr.repositories.TweetRepository;
-import Panhandlr.services.StreamFactory;
 import org.junit.Test;
 import twitter4j.Tweet;
 
@@ -16,7 +15,7 @@ public class TwitterTests {
 
 
     @Test
-    public void testThatFiltersFilterTheCorrectTerms() {
+    public void testThatRepoReturnsTheCorrectNumberOfSamples() {
 
         StreamFactory mockStreamFactory = createMock(StreamFactory.class);
 
