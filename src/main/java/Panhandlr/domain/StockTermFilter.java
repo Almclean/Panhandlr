@@ -1,4 +1,4 @@
-package Panhandlr;
+package Panhandlr.domain;
 
 public class StockTermFilter implements TermFilter {
     private final String[] stocks;

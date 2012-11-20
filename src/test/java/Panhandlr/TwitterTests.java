@@ -1,26 +1,31 @@
 package Panhandlr;
 
+import Panhandlr.domain.StockTermFilter;
+import Panhandlr.repositories.TweetRepository;
+import Panhandlr.services.StreamFactory;
 import org.junit.Test;
+import twitter4j.Tweet;
 
 import java.util.List;
 
-import static Panhandlr.StreamFactory.getNewStreamConnection;
+import static org.easymock.EasyMock.createMock;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class TwitterTests {
 
+
     @Test
     public void testThatFiltersFilterTheCorrectTerms() {
 
+        StreamFactory mockStreamFactory = createMock(StreamFactory.class);
+
         String[] stocks = {"GOOG", "MSFT", "AAPL"};
 
-        TermFilter testTermFilter = new StockTermFilter(stocks);
+        TweetRepository tweetRepository = new TweetRepository(mockStreamFactory, new StockTermFilter(stocks));
 
-        TwitterStreamConnection testTwitterStreamConnection = getNewStreamConnection(testTermFilter);
-
-        List<String> messages = testTwitterStreamConnection.getSampleStreamMessages(10);
-
-        assertThat(messages.size(), is(10));
+        List<Tweet> tweetList = tweetRepository.getFixedNumberOfTweets(5);
+        assertThat(tweetList.size(), is(5));
     }
+
 }
