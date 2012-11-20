@@ -1,9 +1,10 @@
 package Panhandlr;
 
-import Panhandlr.domain.StockTermFilter;
+import Panhandlr.domain.StockStatusListener;
+import Panhandlr.domain.Tweet;
 import Panhandlr.repositories.TweetRepository;
 import org.junit.Test;
-import twitter4j.Tweet;
+import twitter4j.TwitterStream;
 
 import java.util.List;
 
@@ -16,14 +17,19 @@ public class TwitterTests {
 
     @Test
     public void testThatRepoReturnsTheCorrectNumberOfSamples() {
-
-        StreamFactory mockStreamFactory = createMock(StreamFactory.class);
-
         String[] stocks = {"GOOG", "MSFT", "AAPL"};
 
-        TweetRepository tweetRepository = new TweetRepository(mockStreamFactory, new StockTermFilter(stocks));
+        TwitterStream twitterStream = createMock(TwitterStream.class);
+        TweetRepository tweetRepository = new TweetRepository(twitterStream, new StockStatusListener(stocks));
 
-        List<Tweet> tweetList = tweetRepository.getFixedNumberOfTweets(5);
+        List<Tweet> tweetList = null;
+
+        try {
+            tweetList = tweetRepository.getFixedNumberOfTweets(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         assertThat(tweetList.size(), is(5));
     }
 

@@ -1,10 +1,13 @@
 package Panhandlr.repositories;
 
-import Panhandlr.domain.TermFilter;
-import twitter4j.Tweet;
+import Panhandlr.domain.SyphoningStatusListener;
+import Panhandlr.domain.Tweet;
+import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Manages getting tweets, either continuosly or in a batch.
@@ -12,12 +15,28 @@ import java.util.List;
 public class TweetRepository {
 
     private final TwitterStream twitterStream;
+    private final SyphoningStatusListener statusListener;
 
-    public TweetRepository(TwitterStream twitterStream, TermFilter termFilter) {
+    public TweetRepository(TwitterStream twitterStream, SyphoningStatusListener statusListener) {
         this.twitterStream = twitterStream;
+        this.statusListener = statusListener;
+
+        twitterStream.addListener(statusListener);
     }
 
-    public List<Tweet> getFixedNumberOfTweets(int numberOfTweets) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    public List<Tweet> getFixedNumberOfTweets(int numberOfTweets) throws InterruptedException {
+
+        FilterQuery filterQuery = new FilterQuery();
+        filterQuery.track(statusListener.getFilterTerms());
+        twitterStream.filter(filterQuery);
+
+        BlockingQueue<Tweet> tweets = statusListener.syphon();
+
+        while (tweets.size() < numberOfTweets) {
+            Thread.sleep(100);
+        }
+
+        return new ArrayList<Tweet>(tweets);
     }
+
 }
