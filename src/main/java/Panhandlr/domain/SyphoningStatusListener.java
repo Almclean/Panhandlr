@@ -5,7 +5,7 @@ import twitter4j.StatusListener;
 import java.util.concurrent.BlockingQueue;
 
 public interface SyphoningStatusListener extends StatusListener {
-    public <T> BlockingQueue<T> syphon();
+    public BlockingQueue<Tweet> syphon();
 
     public String[] getFilterTerms();
 }

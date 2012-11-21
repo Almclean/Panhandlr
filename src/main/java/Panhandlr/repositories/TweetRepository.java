@@ -30,13 +30,16 @@ public class TweetRepository {
         filterQuery.track(statusListener.getFilterTerms());
         twitterStream.filter(filterQuery);
 
+        int counter = 0;
+        List<Tweet> retList = new ArrayList<Tweet>();
         BlockingQueue<Tweet> tweets = statusListener.syphon();
 
-        while (tweets.size() < numberOfTweets) {
-            Thread.sleep(100);
+        while (counter < numberOfTweets) {
+            retList.add(tweets.take());
+            counter++;
         }
 
-        return new ArrayList<Tweet>(tweets);
+        return retList;
     }
 
 }
