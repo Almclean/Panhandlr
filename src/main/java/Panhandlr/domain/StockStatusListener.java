@@ -18,6 +18,7 @@ public class StockStatusListener implements SyphoningStatusListener {
 
     @Override
     public void onStatus(Status status) {
+        System.out.println("Got a Tweet !");
         tweetQueue.add(new Tweet(status.getText(), status.getUser().getScreenName()));
     }
 

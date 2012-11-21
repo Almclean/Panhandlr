@@ -42,4 +42,8 @@ public class TweetRepository {
         return retList;
     }
 
+    public void closeRepository() {
+        twitterStream.shutdown();
+    }
+
 }
