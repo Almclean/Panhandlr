@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +28,11 @@ public class YahooConnectionHandler implements QuoteSource {
         stocks.append("s=");
 
         for (String stock : stockSymbols) {
-            stocks.append(stock + ",");
+            stocks.append(URLEncoder.encode(stock, "UTF-8") + ",");
         }
 
-
         URL searchUrl = new URL(baseUrl + stocks.toString() + termUrl + staticUrl);
+        System.out.println(" URL : " + searchUrl.toString());
         BufferedReader in = new BufferedReader(new InputStreamReader(searchUrl.openStream()));
 
         String inputLine;

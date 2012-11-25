@@ -3,6 +3,8 @@ package Panhandlr.domain;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -45,6 +47,13 @@ public class StockStatusListener implements SyphoningStatusListener {
 
     @Override
     public String[] getFilterTerms() {
-        return stocks;
+        List<String> termsWithHashCodeAndDollarCode = new ArrayList<String>();
+
+        for (String stock : stocks) {
+            termsWithHashCodeAndDollarCode.add("$" + stock);
+            termsWithHashCodeAndDollarCode.add("#" + stock);
+        }
+
+        return termsWithHashCodeAndDollarCode.toArray(new String[termsWithHashCodeAndDollarCode.size()]);
     }
 }

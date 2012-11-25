@@ -1,7 +1,11 @@
 package Panhandlr.domain;
 
+import au.com.bytecode.opencsv.CSVParser;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.IOException;
 
 public class StockQuote {
 
@@ -22,18 +26,42 @@ public class StockQuote {
     }
 
 
-    public static StockQuote parseRawDetails(String inputLine) {
+    public static StockQuote parseRawDetails(String inputLine) throws IOException {
 
-        String[] fragments = inputLine.split(",");
+        CSVParser csvParser = new CSVParser();
+        String fragments[] = csvParser.parseLine(inputLine);
 
         if (fragments.length != STOCK_ELEMENT_NUMBER) {
             throw new IllegalArgumentException("Malformed raw stock line encountered ! : " + inputLine);
         } else {
-            String companyName = fragments[0].replace("\"", "");
-            String companyCode = fragments[1].replace("\"", "");
+            String companyName = fragments[0];
+            String companyCode = fragments[1];
+            String latestPrice = "N/A".equals(fragments[2]) ? "0.00" : fragments[2];
+            String openPrice = "N/A".equals(fragments[3]) ? "0.00" : fragments[3];
+            String closePrice = "N/A".equals(fragments[4]) ? "0.00" : fragments[4];
 
-            return new StockQuote(companyName, companyCode, fragments[2], fragments[3], fragments[4]);
+            return new StockQuote(companyName, companyCode, latestPrice, openPrice, closePrice);
         }
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public String getQuoteCode() {
+        return quoteCode;
+    }
+
+    public Double getLatestPrice() {
+        return latestPrice;
+    }
+
+    public Double getOpenPrice() {
+        return openPrice;
+    }
+
+    public Double getClosePrice() {
+        return closePrice;
     }
 
     @Override
@@ -66,5 +94,10 @@ public class StockQuote {
                 .append(this.openPrice)
                 .append(this.closePrice)
                 .hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

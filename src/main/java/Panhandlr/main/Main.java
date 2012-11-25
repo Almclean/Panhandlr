@@ -1,9 +1,12 @@
 package Panhandlr.main;
 
+import Panhandlr.domain.StockQuote;
 import Panhandlr.domain.StockStatusListener;
 import Panhandlr.domain.SyphoningStatusListener;
 import Panhandlr.domain.Tweet;
+import Panhandlr.repositories.StockPriceRepository;
 import Panhandlr.repositories.TweetRepository;
+import Panhandlr.services.YahooConnectionHandler;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
@@ -16,13 +19,15 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        //String[] stocks = {"#GOOG", "#AAPL", "#MSFT", "#ARMH", "#HBC", "#AMZN", "#TLH", "#TSLA", "#ADBE",
-        //        "$GOOG", "$AAPL", "$MSFT", "$ARMH", "$HBC", "$AMZN", "$TLH", "$TSLA", "$ADBE"};
-
-        String[] stocks = {"manflu", "#manflu"};
+        String[] stocks = {"GOOG", "AAPL", "MSFT", "ARMH", "HBC", "AMZN", "TLH", "TSLA", "ADBE"};
 
         TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
         SyphoningStatusListener statusListener = new StockStatusListener(stocks);
+        StockPriceRepository stockPriceRepository = new StockPriceRepository(new YahooConnectionHandler());
+
+        for (StockQuote sq : stockPriceRepository.getLatestPricesFor(stocks)) {
+            System.out.println(sq);
+        }
 
         TweetRepository repository = new TweetRepository(twitterStream, statusListener);
 
