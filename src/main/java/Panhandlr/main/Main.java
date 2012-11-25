@@ -16,8 +16,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        String[] stocks = {"#GOOG", "#AAPL", "#MSFT", "#ARMH", "#HBC", "#AMZN", "#TLH", "#TSLA", "#ADBE",
-                "$GOOG", "$AAPL", "$MSFT", "$ARMH", "$HBC", "$AMZN", "$TLH", "$TSLA", "$ADBE"};
+        //String[] stocks = {"#GOOG", "#AAPL", "#MSFT", "#ARMH", "#HBC", "#AMZN", "#TLH", "#TSLA", "#ADBE",
+        //        "$GOOG", "$AAPL", "$MSFT", "$ARMH", "$HBC", "$AMZN", "$TLH", "$TSLA", "$ADBE"};
+
+        String[] stocks = {"manflu", "#manflu"};
 
         TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
         SyphoningStatusListener statusListener = new StockStatusListener(stocks);

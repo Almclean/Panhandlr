@@ -47,8 +47,7 @@ public class Tweet {
             return equalsBuilder
                     .append(this.messageText, rhs.messageText)
                     .append(this.userName, rhs.userName)
-                    .equals(rhs);
-
+                    .isEquals();
         }
     }
 }
