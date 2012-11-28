@@ -6,12 +6,15 @@ import Panhandlr.domain.Tweet;
 import Panhandlr.repositories.StockPriceRepository;
 import Panhandlr.repositories.TweetRepository;
 import Panhandlr.services.QuoteSource;
+import Panhandlr.services.TweetClassifier;
 import org.junit.Test;
 import twitter4j.TwitterStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -68,6 +71,31 @@ public class PanhandlrTests {
         List<StockQuote> actualQuotes = stockRepository.getLatestPricesFor(stocks);
 
         assertThat(actualQuotes, is(stockQuotes));
+    }
+
+    @Test
+    public void testThatTweetsAreCategorisedProperlyAndLoadedIntoAResultMap() {
+
+        List<String> stockList = new ArrayList<>();
+        stockList.add("aapl");
+        stockList.add("amzn");
+        stockList.add("spy");
+
+        Set<String> actualMap = new HashSet<>();
+
+        actualMap.add("AAPL");
+        actualMap.add("AMZN");
+        actualMap.add("SPY");
+
+        String tweetOne = "EOD ETF balancing responsible for most algo programs during the last 15 minutes. $spy $vxx $aapl http://t.co/8hPrni02";
+        String tweetTwo = "$amzn at $247";
+        String tweetThree = "$AAPL called in a plumber to stop the faucet leak lower. Peeling off short now.";
+
+        TweetClassifier tweetClassifier = new TweetClassifier(stockList);
+
+        assertThat(tweetClassifier.classify(tweetOne).size(), is(2));
+        assertThat(tweetClassifier.classify(tweetTwo).size(), is(1));
+        assertThat(tweetClassifier.classify(tweetThree).size(), is(1));
     }
 
     private BlockingQueue<Tweet> createTestBlockingQueue() {
