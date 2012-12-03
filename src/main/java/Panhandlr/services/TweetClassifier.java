@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Simple regex classifier that scans a tweet and returns a Set<String> of the stocks it mentions.
+ */
 public class TweetClassifier {
     private final List<String> stockList;
     private final Pattern pat;
